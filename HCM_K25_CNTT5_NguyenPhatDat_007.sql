@@ -142,7 +142,7 @@ CREATE INDEX idx_app ON APPOINTMENTS(status,fee);
 -- Câu 2: Tạo khung nhìn dữ liệu hiển thị:
 -- họ tên bác sĩ,tổng số phiếu hẹn mà bác sĩ đã nhận,tổng doanh thu phí khám mà bác sĩ đó mang lại
 -- trong đó không tính các phiếu bị hủy
-DROP VIEW view_doctor;
+
 CREATE VIEW view_doctor AS
 SELECT d.full_name,IFNULL(tb_dt_ap.total_ap,0) total_ap_dt,IFNULL(tb_dt_ap.total_fee,0) as total_fee_dt FROM DOCTORS d
 LEFT JOIN (SELECT a.doctor_id,COUNT(doctor_id) total_ap,SUM(fee) total_fee FROM APPOINTMENTS a WHERE status <> 'Cancelled' GROUP BY a.doctor_id) tb_dt_ap 
@@ -155,7 +155,7 @@ ON d.doctor_id = tb_dt_ap.doctor_id;
 -- doctor_id: bác sĩ của phiếu hẹn
 -- note: visit completed
 -- log_time: thời gian hiện tại của hệ thống
-DROP Trigger tg_appointment;
+
 DELIMITER //
 CREATE Trigger tg_appointment
 AFTER UPDATE ON APPOINTMENTS
@@ -170,7 +170,7 @@ DELIMITER ;
 
 -- Câu 2: Viết một Trigger sau cho khi thêm một bản ghi vào bảng APPOINTMENTS có trạng thái 'Completed'
 -- thì hệ thống tự động tăng điểm đánh giá của bác sĩ tương ứng trong bảng DOCTORS thêm 0.1, nhưng đảm bảo điểm đánh giá không vượt quá 5.0
-DROP Trigger tg_dt;
+
 DELIMITER //
 CREATE Trigger tg_dt
 AFTER INSERT ON APPOINTMENTS
@@ -191,7 +191,7 @@ DELIMITER ;
 -- nếu bảng bằng nhau thì trả về Target met
 -- nếu nhỏ hơn thì trả về Normal
 
-DROP PROCEDURE pcd_notification;
+
 DELIMITER //
 CREATE PROCEDURE pcd_notification(IN p_doctor_id INT,OUT p_notification VARCHAR(100))
 BEGIN
@@ -211,7 +211,7 @@ DELIMITER ;
 -- b2: cập nhật mã bác sĩ mới cho phiếu hẹn trong bảng APPOINTMENTS
 -- b3: ghi một bảng ghi mới vào bảng visit_log với ghi chú Doctor reassigned
 -- b4: nếu toàn bộ quá trình thành công thì hoàn tất, nếu xảy ra lỗi ở bất kỳ bước nào thì hủy toàn bộ thao tác
-DROP PROCEDURE pc_change_doctor;
+
 DELIMITER //
 CREATE PROCEDURE pc_change_doctor(p_appointment_id INT,p_new_doctor INT,OUT message VARCHAR(255))
 BEGIN
