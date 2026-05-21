@@ -244,8 +244,6 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL pc_change_doctor(7001,2,@msss);
-SELECT @msss;
 
 SELECT * FROM PATIENTS;
 SELECT * FROM DOCTORS;
